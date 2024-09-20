@@ -15,12 +15,42 @@
                 background-color: antiquewhite;
                 margin-bottom: 50px;
                 display: flex;
-                gap: 10px;
+                gap: 20px;
+                padding: 20px;
             }
 
-            input {
+            input, button {
+                font-size: 24px; /* 增加字体大小 */
+                padding: 10px; /* 增加内边距，使元素更大 */
+                border-radius: 5px;
+            }
+
+            label {
+                font-size: 20px;
+            }
+
+            input[type="color"] {
+                width: 80px;
+                height: 50px; /* 调整颜色选择器的高度 */
+            }
+
+            input[type="number"] {
                 width: 100px;
             }
+
+            button {
+                cursor: pointer;
+                background-color: #bada55; /* 按钮背景色 */
+                border: 2px solid #999;
+                transition: background-color 0.3s ease;
+            }
+
+            button:hover {
+                background-color: #9acd32; /* 鼠标悬停时的颜色变化 */
+            }
+
+            
+            
         </style>
     </head>
     <body>
