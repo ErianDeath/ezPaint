@@ -42,16 +42,29 @@
             ctx.strokeStyle = '#BADA55'; // color of the line
             ctx.lineJoin = 'round'; // shape of the line
             ctx.lineCap = 'round'; // shape of the line
+
             function draw(e) {
                 if (!isDrawing) return;
+                let x, y;
+                if (e.type.includes('mouse')) {
+                    x = e.offsetX;
+                    y = e.offsetY;
+                } 
+                else if (e.type.includes('touch')) {
+                    const touch = e.touches[0];
+                    const rect = canvas.getBoundingClientRect();
+                    x = touch.clientX - rect.left;
+                    y = touch.clientY - rect.top;
+                }
+
                 if (isRainbow) {
                     ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`; // set the color of the line to a hue value
                 }
                 ctx.beginPath(); // start from the beginning of the line
                 ctx.moveTo(lastX, lastY); // go to the last position
-                ctx.lineTo(e.offsetX, e.offsetY); // draw a line to the current position
+                ctx.lineTo(x, y); // draw a line to the current position
                 ctx.stroke(); // draw the line
-                [lastX, lastY] = [e.offsetX, e.offsetY]; // update the last position
+                [lastX, lastY] = [x, y]; // update the last position
                 hue++; // increment the hue value
                 if(hue >= 360) hue = 0;
             }
@@ -84,10 +97,28 @@
             canvas.addEventListener('mouseup', () => isDrawing = false);
             canvas.addEventListener('mouseout', () => isDrawing = false);
 
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // prevent the default action of the touch event
+                isDrawing = true;
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                [lastX, lastY] = [touch.clientX - rect.left, touch.clientY - rect.top];
+            });
+
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault(); // 防止页面滚动
+                draw(e);
+            });
+
+            canvas.addEventListener('touchend', () => isDrawing = false);
+            canvas.addEventListener('touchcancel', () => isDrawing = false);
+            
             const clear = document.querySelector('#clear');
             clear.addEventListener('click', () => {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
             });
+
+
         </script>
     </body>
 </html>
